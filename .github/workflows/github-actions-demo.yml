@@ -10,10 +10,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Install Nomad
-        uses: mikenomitch/setup-nomad@v0.0.1
-        with:
-          nomad_version: ${{ env.NOMAD_VERSION }}
+      - name: Setup Nomad
+        uses: rluisr/nomad-actions@master
       - name: Run `nomad version`
         id: version
         run: "nomad version"
