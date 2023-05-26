@@ -13,7 +13,7 @@ inputs:
   caCertificate:
     description: "The CA certificate of the Nomad cluster"
     required: false
-  method:
+  method_name:
     description: "The name of the auth method to use"
     default: "github"
     required: false

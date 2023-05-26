@@ -2,31 +2,35 @@
 import * as core from '@actions/core';
 import * as rsasign from "jsrsasign";
 import * as fs from "fs";
+import fetch, { Headers } from 'node-fetch';
+
 
 async function main() {
   core.info("info test")
-  let url = core.getInput('url', { required: false });
+  let url = core.getInput('url', { required: false }) || "http://localhost:4646/v1/acl/login";
+  let method_name = core.getInput('method_name', { required: false }) || "github";
+  let github_identity_token = process.env['ACTIONS_RUNTIME_TOKEN'];
 
-  // TODO: make the fetch payload
-  let payload = {};
+  console.log("github_identity_token=", github_identity_token);
 
-  /** @type {'json'} */
-  const responseType = 'json';
-  var content = {
-    json: payload,
-    responseType,
+  let payload = {
+    AuthMethodName: method_name,
+    LoginToken: github_identity_token,
   };
 
   core.debug(`Retrieving Nomad Token from ${url}`);
 
   let response;
+  let data;
 
   try {
     response = await fetch(url, {
-      method: 'POST',
-      body: JSON.stringify(content),
+      method: 'PUT',
+      body: JSON.stringify(payload),
       headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' }
     });
+    data = await response.json();
+    console.log("data", data);
   } catch (err) {
     core.debug("Error making Post to Nomad");
     throw err;
@@ -42,14 +46,21 @@ async function main() {
     // core.debug(`Token Metadata: ${JSON.stringify(response.body.auth.metadata)}`);
     // core.endGroup();
 
-    return response.body.auth.client_token;
+    return response.json();
   } else {
+    console.log("response", response.body);
     throw Error(`Unable to retrieve token from Nomad at url ${url}.`);
   }
 }
 
 core.info("pre main");
-main();
+main().then((res) => {
+  console.log("res: ", res);
+}).catch((err) => {
+  console.log("ERROR");
+  console.log(err);
+  throw err;
+});
 core.info("post main");
 
 // /***
