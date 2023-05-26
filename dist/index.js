@@ -1138,13 +1138,13 @@ var require_lib = __commonJS({
           let info2 = this._prepareRequest(verb, parsedUrl, headers);
           const maxTries = this._allowRetries && RetryableHttpVerbs.includes(verb) ? this._maxRetries + 1 : 1;
           let numTries = 0;
-          let response;
+          let response2;
           do {
-            response = yield this.requestRaw(info2, data);
-            if (response && response.message && response.message.statusCode === HttpCodes.Unauthorized) {
+            response2 = yield this.requestRaw(info2, data);
+            if (response2 && response2.message && response2.message.statusCode === HttpCodes.Unauthorized) {
               let authenticationHandler;
               for (const handler of this.handlers) {
-                if (handler.canHandleAuthentication(response)) {
+                if (handler.canHandleAuthentication(response2)) {
                   authenticationHandler = handler;
                   break;
                 }
@@ -1152,12 +1152,12 @@ var require_lib = __commonJS({
               if (authenticationHandler) {
                 return authenticationHandler.handleAuthentication(this, info2, data);
               } else {
-                return response;
+                return response2;
               }
             }
             let redirectsRemaining = this._maxRedirects;
-            while (response.message.statusCode && HttpRedirectCodes.includes(response.message.statusCode) && this._allowRedirects && redirectsRemaining > 0) {
-              const redirectUrl = response.message.headers["location"];
+            while (response2.message.statusCode && HttpRedirectCodes.includes(response2.message.statusCode) && this._allowRedirects && redirectsRemaining > 0) {
+              const redirectUrl = response2.message.headers["location"];
               if (!redirectUrl) {
                 break;
               }
@@ -1165,7 +1165,7 @@ var require_lib = __commonJS({
               if (parsedUrl.protocol === "https:" && parsedUrl.protocol !== parsedRedirectUrl.protocol && !this._allowRedirectDowngrade) {
                 throw new Error("Redirect from HTTPS to HTTP protocol. This downgrade is not allowed for security reasons. If you want to allow this behavior, set the allowRedirectDowngrade option to true.");
               }
-              yield response.readBody();
+              yield response2.readBody();
               if (parsedRedirectUrl.hostname !== parsedUrl.hostname) {
                 for (const header in headers) {
                   if (header.toLowerCase() === "authorization") {
@@ -1174,19 +1174,19 @@ var require_lib = __commonJS({
                 }
               }
               info2 = this._prepareRequest(verb, parsedRedirectUrl, headers);
-              response = yield this.requestRaw(info2, data);
+              response2 = yield this.requestRaw(info2, data);
               redirectsRemaining--;
             }
-            if (!response.message.statusCode || !HttpResponseRetryCodes.includes(response.message.statusCode)) {
-              return response;
+            if (!response2.message.statusCode || !HttpResponseRetryCodes.includes(response2.message.statusCode)) {
+              return response2;
             }
             numTries += 1;
             if (numTries < maxTries) {
-              yield response.readBody();
+              yield response2.readBody();
               yield this._performExponentialBackoff(numTries);
             }
           } while (numTries < maxTries);
-          return response;
+          return response2;
         });
       }
       /**
@@ -1375,13 +1375,13 @@ var require_lib = __commonJS({
         return __awaiter(this, void 0, void 0, function* () {
           return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
             const statusCode = res.message.statusCode || 0;
-            const response = {
+            const response2 = {
               statusCode,
               result: null,
               headers: {}
             };
             if (statusCode === HttpCodes.NotFound) {
-              resolve(response);
+              resolve(response2);
             }
             function dateTimeDeserializer(key, value) {
               if (typeof value === "string") {
@@ -1402,9 +1402,9 @@ var require_lib = __commonJS({
                 } else {
                   obj = JSON.parse(contents);
                 }
-                response.result = obj;
+                response2.result = obj;
               }
-              response.headers = res.message.headers;
+              response2.headers = res.message.headers;
             } catch (err) {
             }
             if (statusCode > 299) {
@@ -1417,10 +1417,10 @@ var require_lib = __commonJS({
                 msg = `Failed request: (${statusCode})`;
               }
               const err = new HttpClientError(msg, statusCode);
-              err.result = response.result;
+              err.result = response2.result;
               reject(err);
             } else {
-              resolve(response);
+              resolve(response2);
             }
           }));
         });
@@ -7471,9 +7471,9 @@ var Response = class extends Body {
     });
   }
   static error() {
-    const response = new Response(null, { status: 0, statusText: "" });
-    response[INTERNALS2].type = "error";
-    return response;
+    const response2 = new Response(null, { status: 0, statusText: "" });
+    response2[INTERNALS2].type = "error";
+    return response2;
   }
   static json(data = void 0, init = {}) {
     const body = JSON.stringify(data);
@@ -7874,23 +7874,23 @@ async function fetch(url, options_) {
     }
     if (parsedURL.protocol === "data:") {
       const data = dist_default(request.url);
-      const response2 = new Response(data, { headers: { "Content-Type": data.typeFull } });
-      resolve(response2);
+      const response3 = new Response(data, { headers: { "Content-Type": data.typeFull } });
+      resolve(response3);
       return;
     }
     const send = (parsedURL.protocol === "https:" ? import_node_https.default : import_node_http2.default).request;
     const { signal } = request;
-    let response = null;
+    let response2 = null;
     const abort = () => {
       const error = new AbortError("The operation was aborted.");
       reject(error);
       if (request.body && request.body instanceof import_node_stream2.default.Readable) {
         request.body.destroy(error);
       }
-      if (!response || !response.body) {
+      if (!response2 || !response2.body) {
         return;
       }
-      response.body.emit("error", error);
+      response2.body.emit("error", error);
     };
     if (signal && signal.aborted) {
       abort();
@@ -7915,8 +7915,8 @@ async function fetch(url, options_) {
       finalize();
     });
     fixResponseChunkedTransferBadEnding(request_, (error) => {
-      if (response && response.body) {
-        response.body.destroy(error);
+      if (response2 && response2.body) {
+        response2.body.destroy(error);
       }
     });
     if (process.version < "v14") {
@@ -7926,10 +7926,10 @@ async function fetch(url, options_) {
           endedWithEventsCount = s2._eventsCount;
         });
         s2.prependListener("close", (hadError) => {
-          if (response && endedWithEventsCount < s2._eventsCount && !hadError) {
+          if (response2 && endedWithEventsCount < s2._eventsCount && !hadError) {
             const error = new Error("Premature close");
             error.code = "ERR_STREAM_PREMATURE_CLOSE";
-            response.body.emit("error", error);
+            response2.body.emit("error", error);
           }
         });
       });
@@ -8029,8 +8029,8 @@ async function fetch(url, options_) {
       };
       const codings = headers.get("Content-Encoding");
       if (!request.compress || request.method === "HEAD" || codings === null || response_.statusCode === 204 || response_.statusCode === 304) {
-        response = new Response(body, responseOptions);
-        resolve(response);
+        response2 = new Response(body, responseOptions);
+        resolve(response2);
         return;
       }
       const zlibOptions = {
@@ -8043,8 +8043,8 @@ async function fetch(url, options_) {
             reject(error);
           }
         });
-        response = new Response(body, responseOptions);
-        resolve(response);
+        response2 = new Response(body, responseOptions);
+        resolve(response2);
         return;
       }
       if (codings === "deflate" || codings === "x-deflate") {
@@ -8067,13 +8067,13 @@ async function fetch(url, options_) {
               }
             });
           }
-          response = new Response(body, responseOptions);
-          resolve(response);
+          response2 = new Response(body, responseOptions);
+          resolve(response2);
         });
         raw.once("end", () => {
-          if (!response) {
-            response = new Response(body, responseOptions);
-            resolve(response);
+          if (!response2) {
+            response2 = new Response(body, responseOptions);
+            resolve(response2);
           }
         });
         return;
@@ -8084,12 +8084,12 @@ async function fetch(url, options_) {
             reject(error);
           }
         });
-        response = new Response(body, responseOptions);
-        resolve(response);
+        response2 = new Response(body, responseOptions);
+        resolve(response2);
         return;
       }
-      response = new Response(body, responseOptions);
-      resolve(response);
+      response2 = new Response(body, responseOptions);
+      resolve(response2);
     });
     writeToStream(request_, request).catch(reject);
   });
@@ -8099,8 +8099,8 @@ function fixResponseChunkedTransferBadEnding(request, errorCallback) {
   let isChunkedTransfer = false;
   let properLastChunkReceived = false;
   let previousChunk;
-  request.on("response", (response) => {
-    const { headers } = response;
+  request.on("response", (response2) => {
+    const { headers } = response2;
     isChunkedTransfer = headers["transfer-encoding"] === "chunked" && !headers["content-length"];
   });
   request.on("socket", (socket) => {
@@ -8134,28 +8134,29 @@ async function main() {
   let url = nomadUrl + "/v1/acl/login";
   let method_name = core.getInput("method_name", { required: false }) || "github";
   let github_identity_token = process.env["ACTIONS_RUNTIME_TOKEN"];
+  console.log("github_identity_token", github_identity_token);
   let payload = {
     AuthMethodName: method_name,
-    LoginToken: github_identity_token
+    LoginToken: "github_identity_token"
   };
   core.debug(`Retrieving Nomad Token from ${url}`);
-  let response;
+  let res;
   let data;
   try {
-    response = await fetch(url, {
+    res = await fetch(url, {
       method: "PUT",
-      body: JSON.stringify(payload),
-      headers: { "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" }
+      body: JSON.stringify(payload)
     });
-    data = await response.json();
-    console.log("data", data);
+    console.log("res: ", res.body);
+    data = await res.json();
   } catch (err) {
-    core.debug("Error making Post to Nomad");
+    core.debug("Error making Put to Nomad");
     throw err;
   }
+  console.log("data", data);
   core.info("post fetch info");
-  if (response && response.body && response.body.auth && response.body.auth.client_token) {
-    return response.json();
+  if (data && res.body && res.body.auth && res.body.auth.client_token) {
+    return "foo";
   } else {
     console.log("response", response.body);
     throw Error(`Unable to retrieve token from Nomad at url ${url}.`);
