@@ -3,6 +3,6 @@
     "esbuild": "0.17.19"
   },
   "scripts": {
-    "build": "esbuild src/main.ts --bundle --outfile=dist/out.js"
+    "build": "esbuild src/main.ts --bundle --outfile=dist/index.js"
   }
 }
