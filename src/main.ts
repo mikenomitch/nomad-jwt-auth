@@ -10,8 +10,9 @@ async function main() {
   let url = core.getInput('url', { required: false }) || "http://localhost:4646/v1/acl/login";
   let method_name = core.getInput('method_name', { required: false }) || "github";
   let github_identity_token = process.env['ACTIONS_RUNTIME_TOKEN'];
+  let foo = "XX" + github_identity_token + "XX"
 
-  console.log("github_identity_token=", github_identity_token);
+  console.log("foo=", foo);
 
   let payload = {
     AuthMethodName: method_name,
