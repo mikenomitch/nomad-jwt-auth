@@ -1,7 +1,7 @@
 // @ts-check
-import core from "@actions/core";
-import rsasign from "jsrsasign";
-import fs from "fs";
+import * as core from '@actions/core';
+import * as rsasign from "jsrsasign";
+import * as fs from "fs";
 
 async function main() {
   core.info("info test")
