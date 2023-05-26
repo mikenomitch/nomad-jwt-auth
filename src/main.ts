@@ -4,6 +4,7 @@ import rsasign from "jsrsasign";
 import fs from "fs";
 
 async function main() {
+  core.info("info test")
   let url = core.getInput('url', { required: false });
 
   // TODO: make the fetch payload
@@ -31,6 +32,8 @@ async function main() {
     throw err;
   }
 
+  core.info("post fetch info")
+
   // TODO: GET THE CORRECT PATH!
   if (response && response.body && response.body.auth && response.body.auth.client_token) {
     // core.debug('✔ Nomad Token successfully retrieved');
@@ -45,7 +48,9 @@ async function main() {
   }
 }
 
+core.info("pre main");
 main();
+core.info("post main");
 
 // /***
 //  * Authenticate with Vault and retrieve a Vault token that can be used for requests.
