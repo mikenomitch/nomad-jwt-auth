@@ -1,4 +1,2 @@
-(() => {
-  // src/main.ts
-  console.log("Hello World!");
-})();
+// src/main.ts
+console.log("Hello World!");

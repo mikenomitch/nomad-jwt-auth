@@ -1,8 +1,15 @@
 {
+  "name": "nomad-auth-gha",
+  "version": "1.0.0",
+  "description": "A Github Action that mints a short-lived Nomad token from GHA OIDC token.",
+  "main": "dist/index.js",
   "dependencies": {
-    "esbuild": "0.17.19"
+    "@actions/core": "^1.10.0",
+    "jsrsasign": "^10.6.1",
+    "esbuild": "0.17.19",
+    "@types/node": "^7.0.5"
   },
   "scripts": {
-    "build": "esbuild src/main.ts --bundle --outfile=dist/index.js"
+    "build": "esbuild src/main.ts --bundle --platform=node --target=node16 --outfile=dist/index.js"
   }
 }
