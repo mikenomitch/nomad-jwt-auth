@@ -16,3 +16,9 @@ jobs:
           version: ${{ env.PRODUCT_VERSION }}
       - name: Run `nomad version`
         run: "nomad version"
+      - name: Use Local Action
+        uses: "./"
+        id: invalid_version
+        with:
+          url: "www.google.com"
+        continue-on-error: true

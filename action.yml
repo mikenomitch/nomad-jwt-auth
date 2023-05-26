@@ -1,0 +1,32 @@
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: Apache-2.0
+
+---
+
+name: "Nomad JWT Auth"
+author: "Mike Nomitch"
+description: "A GitHub Action to mint a short-lived Nomad token using GHA identity tokens"
+inputs:
+  url:
+    description: "The URL of the Nomad cluster"
+    required: true
+  caCertificate:
+    description: "The CA certificate of the Nomad cluster"
+    required: false
+  method:
+    description: "The name of the auth method to use"
+    default: "github"
+    required: false
+  token_ttl:
+    description: "The TTL for the minted token"
+    default: "3600" # 1 hour
+    required: false
+outputs:
+  nomad_token:
+    description: "The Nomad token minted using github auth"
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
+branding:
+  icon: "terminal"
+  color: "green"
