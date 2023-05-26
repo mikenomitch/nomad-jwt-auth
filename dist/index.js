@@ -8130,7 +8130,8 @@ function fixResponseChunkedTransferBadEnding(request, errorCallback) {
 // src/main.ts
 async function main() {
   core.info("info test");
-  let url = core.getInput("url", { required: false }) || "http://2fed-50-47-36-82.ngrok-free.app/v1/acl/login";
+  let nomadUrl = core.getInput("url", { required: false }) || "http://localhost:4646";
+  let url = nomadUrl + "/v1/acl/login";
   let method_name = core.getInput("method_name", { required: false }) || "github";
   let github_identity_token = process.env["ACTIONS_RUNTIME_TOKEN"];
   let payload = {
