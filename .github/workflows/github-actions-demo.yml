@@ -7,6 +7,9 @@ env:
 jobs:
   Deploy-Nomad-Job:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -18,7 +21,6 @@ jobs:
         run: "nomad version"
       - name: Use Local Action
         uses: "./"
-        id: invalid_version
         with:
           url: http://f648-50-35-64-228.ngrok-free.app
         continue-on-error: true
