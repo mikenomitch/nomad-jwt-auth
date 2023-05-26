@@ -11,8 +11,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Setup `nomad`
-      uses: lucasmelin/setup-nomad@v1
-      with:
-        version: ${{ env.PRODUCT_VERSION }}
+        uses: lucasmelin/setup-nomad@v1
+        with:
+          version: ${{ env.PRODUCT_VERSION }}
       - name: Run `nomad version`
         run: "nomad version"
