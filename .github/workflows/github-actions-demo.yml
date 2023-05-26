@@ -2,7 +2,7 @@ name: Nomad GHA Demo
 run-name: ${{ github.actor }} is testing out Nomad actions
 on: [push]
 env:
-  NOMAD_VERSION: "1.5.2"
+  PRODUCT_VERSION: "1.5.6"
 
 jobs:
   Deploy-Nomad-Job:
@@ -10,8 +10,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Setup Nomad
-        uses: rluisr/nomad-actions@master
+      - name: Setup `nomad`
+        uses: hashicorp/setup-nomad@v1.0.0
+        id: setup
+        with:
+          version: ${{ env.PRODUCT_VERSION }}
       - name: Run `nomad version`
-        id: version
         run: "nomad version"
