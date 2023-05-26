@@ -8137,7 +8137,7 @@ async function main() {
   console.log("github_identity_token", github_identity_token);
   let payload = {
     AuthMethodName: method_name,
-    LoginToken: "github_identity_token"
+    LoginToken: github_identity_token
   };
   core.debug(`Retrieving Nomad Token from ${url}`);
   let res;
