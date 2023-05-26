@@ -20,5 +20,5 @@ jobs:
         uses: "./"
         id: invalid_version
         with:
-          url: http://2fed-50-47-36-82.ngrok-free.app"
+          url: http://2fed-50-47-36-82.ngrok-free.app
         continue-on-error: true
