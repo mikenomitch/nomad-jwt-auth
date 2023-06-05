@@ -23,7 +23,7 @@ jobs:
         id: nomad-jwt-auth
         uses: "./"
         with:
-          url: http://cc25-50-35-64-228.ngrok-free.app
+          url: http://1fb0-50-35-64-228.ngrok-free.app
         continue-on-error: true
       - name: Print Token
         run: "echo token: ${{ steps.nomad-jwt-auth.outputs.nomad_token }}"
