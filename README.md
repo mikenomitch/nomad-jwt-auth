@@ -23,10 +23,12 @@ Confirm that it works with:
 ### Create a binding rule to allow mgmt access
 
 Run the following to update the action for this action:
-`nomad acl binding-rule create \
+```
+nomad acl binding-rule create \
     -description "repo to mgmt" \
     -auth-method "github" \
     -bind-type "management" \
-    -selector "mikenomitch == owner"`
+    -selector "value.owner == mikenomitch"
+```
 
 Note: this will give mgmt permissions, which is bad
