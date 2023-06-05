@@ -2146,22 +2146,22 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
       process.stdout.write(message + os.EOL);
     }
     exports.info = info2;
-    function startGroup(name) {
+    function startGroup2(name) {
       command_1.issue("group", name);
     }
-    exports.startGroup = startGroup;
-    function endGroup() {
+    exports.startGroup = startGroup2;
+    function endGroup2() {
       command_1.issue("endgroup");
     }
-    exports.endGroup = endGroup;
+    exports.endGroup = endGroup2;
     function group(name, fn) {
       return __awaiter(this, void 0, void 0, function* () {
-        startGroup(name);
+        startGroup2(name);
         let result;
         try {
           result = yield fn();
         } finally {
-          endGroup();
+          endGroup2();
         }
         return result;
       });
@@ -8132,18 +8132,16 @@ async function main() {
   core.info("info test");
   let nomadUrl = core.getInput("url", { required: false }) || "http://localhost:4646";
   let url = nomadUrl + "/v1/acl/login";
-  console.log("url: " + url);
   let method_name = core.getInput("method_name", { required: false }) || "github";
   const githubAudience = core.getInput("jwtGithubAudience", { required: false });
   let idToken = await core.getIDToken(githubAudience);
-  console.log("idToken", idToken);
   let github_identity_token = idToken;
-  console.log("github_identity_token", github_identity_token);
   let payload = {
     AuthMethodName: method_name,
     LoginToken: github_identity_token
   };
-  core.debug(`Retrieving Nomad Token from ${url}`);
+  core.debug(`Retrieving Nomad Token from: ${url}`);
+  core.debug(`Using auth method: ${method_name}`);
   let res;
   let data;
   try {
@@ -8151,36 +8149,28 @@ async function main() {
       method: "PUT",
       body: JSON.stringify(payload)
     });
-    console.log("res: ", res.body);
     data = await res.json();
   } catch (err) {
     core.debug("Error making Put to Nomad");
-    console.log("err", err);
+    core.debug(err);
     throw err;
   }
-  console.log("data", data);
-  console.log("res", res);
-  console.log("res.body", res.body);
-  console.log("tkn", res.body.SecretID);
-  core.info("post fetch info");
-  if (data && res.body && res.body.SecretID) {
+  if (data && data.SecretID) {
     core.debug("\u2714 Nomad Token successfully retrieved");
-    core.setOutput("nomad_token", res.body.SecretID);
-    return res.body.SecretID;
+    core.startGroup("Token Info");
+    core.debug(`Name: ${data.Name}`);
+    core.debug(`AccessorID: ${data.AccessorID}`);
+    core.debug(`Type: ${data.Type}`);
+    core.debug(`Policies: ${JSON.stringify(data.Policies)}`);
+    core.debug(`Roles: ${JSON.stringify(data.Roles)}`);
+    core.endGroup();
+    core.setOutput("nomad_token", data.SecretID);
+    return "done";
   } else {
-    console.log("response", res.body);
     throw Error(`Unable to retrieve token from Nomad at url ${url}.`);
   }
 }
-core.info("pre main");
-main().then((res) => {
-  console.log("res: ", res);
-}).catch((err) => {
-  console.log("ERROR");
-  console.log(err);
-  throw err;
-});
-core.info("post main");
+main();
 /*! Bundled license information:
 
 fetch-blob/index.js:
