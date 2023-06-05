@@ -24,3 +24,5 @@ Run the following to update the action for this action:
     -auth-method "github" \
     -bind-type "management" \
     -selector "mikenomitch == owner"`
+
+Note: this will give mgmt permissions, which is bad
