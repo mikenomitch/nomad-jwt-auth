@@ -22,5 +22,5 @@ jobs:
       - name: Use Local Action
         uses: "./"
         with:
-          url: http://4a0a-50-35-64-228.ngrok-free.app
+          url: http://cc25-50-35-64-228.ngrok-free.app
         continue-on-error: true
