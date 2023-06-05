@@ -53,19 +53,22 @@ async function main() {
   console.log("data", data);
   console.log("res", res);
   console.log("res.body", res.body);
+  console.log("tkn", res.body.SecretID);
 
   core.info("post fetch info")
 
   // TODO: GET THE CORRECT PATH!
-  if (data && res.body && res.body.auth && res.body.auth.client_token) {
-    // core.debug('✔ Nomad Token successfully retrieved');
+  if (data && res.body && res.body.SecretID) {
+    core.debug('✔ Nomad Token successfully retrieved');
     // core.startGroup('Token Info');
     // core.debug(`Operating under policies: ${JSON.stringify(res.body.auth.policies)}`);
     // core.debug(`Token Metadata: ${JSON.stringify(res.body.auth.metadata)}`);
     // core.endGroup();
 
+    core.setOutput('nomad_token', res.body.SecretID);
+
     // return "foo"
-    return res.json();
+    return res.body.SecretID;
   } else {
     console.log("response", res.body);
     throw Error(`Unable to retrieve token from Nomad at url ${url}.`);

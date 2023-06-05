@@ -2104,7 +2104,7 @@ var require_core = __commonJS({
 Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     }
     exports.getBooleanInput = getBooleanInput;
-    function setOutput(name, value) {
+    function setOutput2(name, value) {
       const filePath = process.env["GITHUB_OUTPUT"] || "";
       if (filePath) {
         return file_command_1.issueFileCommand("OUTPUT", file_command_1.prepareKeyValueMessage(name, value));
@@ -2112,7 +2112,7 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
       process.stdout.write(os.EOL);
       command_1.issueCommand("set-output", { name }, utils_1.toCommandValue(value));
     }
-    exports.setOutput = setOutput;
+    exports.setOutput = setOutput2;
     function setCommandEcho(enabled) {
       command_1.issue("echo", enabled ? "on" : "off");
     }
@@ -8161,9 +8161,12 @@ async function main() {
   console.log("data", data);
   console.log("res", res);
   console.log("res.body", res.body);
+  console.log("tkn", res.body.SecretID);
   core.info("post fetch info");
-  if (data && res.body && res.body.auth && res.body.auth.client_token) {
-    return res.json();
+  if (data && res.body && res.body.SecretID) {
+    core.debug("\u2714 Nomad Token successfully retrieved");
+    core.setOutput("nomad_token", res.body.SecretID);
+    return res.body.SecretID;
   } else {
     console.log("response", res.body);
     throw Error(`Unable to retrieve token from Nomad at url ${url}.`);
