@@ -1,27 +1,25 @@
 // @ts-check
 import * as core from '@actions/core';
-// import * as rsasign from "jsrsasign";
-// import * as fs from "fs";
-import fetch, { Headers } from 'node-fetch';
-
+import fetch from 'node-fetch';
 
 async function main() {
-  core.info("info test")
-  let nomadUrl = core.getInput('url', { required: false }) || "http://localhost:4646";
+  let nomadUrl = core.getInput('url', { required: false });
   let url = nomadUrl + "/v1/acl/login"
 
-  let method_name = core.getInput('method_name', { required: false }) || "github";
-  const githubAudience = core.getInput('jwtGithubAudience', { required: false });
-  let idToken = await core.getIDToken(githubAudience);
-  let github_identity_token = idToken;
+  let methodName = core.getInput('methodName', { required: false });
+  let idToken = core.getInput('identityToken', { required: false });
+  if (!idToken) {
+    let githubAudience = core.getInput('jwtGithubAudience', { required: false });
+    idToken = await core.getIDToken(githubAudience);
+  }
 
   let payload = {
-    AuthMethodName: method_name,
-    LoginToken: github_identity_token,
+    AuthMethodName: methodName,
+    LoginToken: idToken,
   };
 
   core.debug(`Retrieving Nomad Token from: ${url}`);
-  core.debug(`Using auth method: ${method_name}`);
+  core.debug(`Using auth method: ${methodName}`);
 
   let res;
   let data;
@@ -50,7 +48,8 @@ async function main() {
     core.debug(`Roles: ${JSON.stringify(data.Roles)}`);
     core.endGroup();
 
-    core.setOutput('nomad_token', data.SecretID);
+    core.setOutput('nomadToken', data.SecretID);
+    core.setOutput('nomadUrl', url);
 
     return "done"
   } else {

@@ -25,5 +25,5 @@ jobs:
         with:
           url: http://1fb0-50-35-64-228.ngrok-free.app
         continue-on-error: true
-      - name: Print Token
-        run: "echo token: ${{ steps.nomad-jwt-auth.outputs.nomad_token }}"
+      - name: Get Status
+        run: NOMAD_URL="${{ steps.nomad-jwt-auth.outputs.nomadUrl }}" NOMAD_TOKEN="${{ steps.nomad-jwt-auth.outputs.nomadToken }}" nomad status

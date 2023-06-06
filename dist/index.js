@@ -946,11 +946,11 @@ var require_lib = __commonJS({
       HttpCodes2[HttpCodes2["ServiceUnavailable"] = 503] = "ServiceUnavailable";
       HttpCodes2[HttpCodes2["GatewayTimeout"] = 504] = "GatewayTimeout";
     })(HttpCodes = exports.HttpCodes || (exports.HttpCodes = {}));
-    var Headers3;
-    (function(Headers4) {
-      Headers4["Accept"] = "accept";
-      Headers4["ContentType"] = "content-type";
-    })(Headers3 = exports.Headers || (exports.Headers = {}));
+    var Headers2;
+    (function(Headers3) {
+      Headers3["Accept"] = "accept";
+      Headers3["ContentType"] = "content-type";
+    })(Headers2 = exports.Headers || (exports.Headers = {}));
     var MediaTypes;
     (function(MediaTypes2) {
       MediaTypes2["ApplicationJson"] = "application/json";
@@ -1092,7 +1092,7 @@ var require_lib = __commonJS({
        */
       getJson(requestUrl, additionalHeaders = {}) {
         return __awaiter(this, void 0, void 0, function* () {
-          additionalHeaders[Headers3.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers3.Accept, MediaTypes.ApplicationJson);
+          additionalHeaders[Headers2.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers2.Accept, MediaTypes.ApplicationJson);
           const res = yield this.get(requestUrl, additionalHeaders);
           return this._processResponse(res, this.requestOptions);
         });
@@ -1100,8 +1100,8 @@ var require_lib = __commonJS({
       postJson(requestUrl, obj, additionalHeaders = {}) {
         return __awaiter(this, void 0, void 0, function* () {
           const data = JSON.stringify(obj, null, 2);
-          additionalHeaders[Headers3.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers3.Accept, MediaTypes.ApplicationJson);
-          additionalHeaders[Headers3.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers3.ContentType, MediaTypes.ApplicationJson);
+          additionalHeaders[Headers2.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers2.Accept, MediaTypes.ApplicationJson);
+          additionalHeaders[Headers2.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers2.ContentType, MediaTypes.ApplicationJson);
           const res = yield this.post(requestUrl, data, additionalHeaders);
           return this._processResponse(res, this.requestOptions);
         });
@@ -1109,8 +1109,8 @@ var require_lib = __commonJS({
       putJson(requestUrl, obj, additionalHeaders = {}) {
         return __awaiter(this, void 0, void 0, function* () {
           const data = JSON.stringify(obj, null, 2);
-          additionalHeaders[Headers3.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers3.Accept, MediaTypes.ApplicationJson);
-          additionalHeaders[Headers3.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers3.ContentType, MediaTypes.ApplicationJson);
+          additionalHeaders[Headers2.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers2.Accept, MediaTypes.ApplicationJson);
+          additionalHeaders[Headers2.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers2.ContentType, MediaTypes.ApplicationJson);
           const res = yield this.put(requestUrl, data, additionalHeaders);
           return this._processResponse(res, this.requestOptions);
         });
@@ -1118,8 +1118,8 @@ var require_lib = __commonJS({
       patchJson(requestUrl, obj, additionalHeaders = {}) {
         return __awaiter(this, void 0, void 0, function* () {
           const data = JSON.stringify(obj, null, 2);
-          additionalHeaders[Headers3.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers3.Accept, MediaTypes.ApplicationJson);
-          additionalHeaders[Headers3.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers3.ContentType, MediaTypes.ApplicationJson);
+          additionalHeaders[Headers2.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers2.Accept, MediaTypes.ApplicationJson);
+          additionalHeaders[Headers2.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers2.ContentType, MediaTypes.ApplicationJson);
           const res = yield this.patch(requestUrl, data, additionalHeaders);
           return this._processResponse(res, this.requestOptions);
         });
@@ -1135,12 +1135,12 @@ var require_lib = __commonJS({
             throw new Error("Client has already been disposed.");
           }
           const parsedUrl = new URL(requestUrl);
-          let info2 = this._prepareRequest(verb, parsedUrl, headers);
+          let info = this._prepareRequest(verb, parsedUrl, headers);
           const maxTries = this._allowRetries && RetryableHttpVerbs.includes(verb) ? this._maxRetries + 1 : 1;
           let numTries = 0;
           let response;
           do {
-            response = yield this.requestRaw(info2, data);
+            response = yield this.requestRaw(info, data);
             if (response && response.message && response.message.statusCode === HttpCodes.Unauthorized) {
               let authenticationHandler;
               for (const handler of this.handlers) {
@@ -1150,7 +1150,7 @@ var require_lib = __commonJS({
                 }
               }
               if (authenticationHandler) {
-                return authenticationHandler.handleAuthentication(this, info2, data);
+                return authenticationHandler.handleAuthentication(this, info, data);
               } else {
                 return response;
               }
@@ -1173,8 +1173,8 @@ var require_lib = __commonJS({
                   }
                 }
               }
-              info2 = this._prepareRequest(verb, parsedRedirectUrl, headers);
-              response = yield this.requestRaw(info2, data);
+              info = this._prepareRequest(verb, parsedRedirectUrl, headers);
+              response = yield this.requestRaw(info, data);
               redirectsRemaining--;
             }
             if (!response.message.statusCode || !HttpResponseRetryCodes.includes(response.message.statusCode)) {
@@ -1203,7 +1203,7 @@ var require_lib = __commonJS({
        * @param info
        * @param data
        */
-      requestRaw(info2, data) {
+      requestRaw(info, data) {
         return __awaiter(this, void 0, void 0, function* () {
           return new Promise((resolve, reject) => {
             function callbackForResult(err, res) {
@@ -1215,7 +1215,7 @@ var require_lib = __commonJS({
                 resolve(res);
               }
             }
-            this.requestRawWithCallback(info2, data, callbackForResult);
+            this.requestRawWithCallback(info, data, callbackForResult);
           });
         });
       }
@@ -1225,12 +1225,12 @@ var require_lib = __commonJS({
        * @param data
        * @param onResult
        */
-      requestRawWithCallback(info2, data, onResult) {
+      requestRawWithCallback(info, data, onResult) {
         if (typeof data === "string") {
-          if (!info2.options.headers) {
-            info2.options.headers = {};
+          if (!info.options.headers) {
+            info.options.headers = {};
           }
-          info2.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
+          info.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
         }
         let callbackCalled = false;
         function handleResult(err, res) {
@@ -1239,7 +1239,7 @@ var require_lib = __commonJS({
             onResult(err, res);
           }
         }
-        const req = info2.httpModule.request(info2.options, (msg) => {
+        const req = info.httpModule.request(info.options, (msg) => {
           const res = new HttpClientResponse(msg);
           handleResult(void 0, res);
         });
@@ -1251,7 +1251,7 @@ var require_lib = __commonJS({
           if (socket) {
             socket.end();
           }
-          handleResult(new Error(`Request timeout: ${info2.options.path}`));
+          handleResult(new Error(`Request timeout: ${info.options.path}`));
         });
         req.on("error", function(err) {
           handleResult(err);
@@ -1278,27 +1278,27 @@ var require_lib = __commonJS({
         return this._getAgent(parsedUrl);
       }
       _prepareRequest(method, requestUrl, headers) {
-        const info2 = {};
-        info2.parsedUrl = requestUrl;
-        const usingSsl = info2.parsedUrl.protocol === "https:";
-        info2.httpModule = usingSsl ? https2 : http3;
+        const info = {};
+        info.parsedUrl = requestUrl;
+        const usingSsl = info.parsedUrl.protocol === "https:";
+        info.httpModule = usingSsl ? https2 : http3;
         const defaultPort = usingSsl ? 443 : 80;
-        info2.options = {};
-        info2.options.host = info2.parsedUrl.hostname;
-        info2.options.port = info2.parsedUrl.port ? parseInt(info2.parsedUrl.port) : defaultPort;
-        info2.options.path = (info2.parsedUrl.pathname || "") + (info2.parsedUrl.search || "");
-        info2.options.method = method;
-        info2.options.headers = this._mergeHeaders(headers);
+        info.options = {};
+        info.options.host = info.parsedUrl.hostname;
+        info.options.port = info.parsedUrl.port ? parseInt(info.parsedUrl.port) : defaultPort;
+        info.options.path = (info.parsedUrl.pathname || "") + (info.parsedUrl.search || "");
+        info.options.method = method;
+        info.options.headers = this._mergeHeaders(headers);
         if (this.userAgent != null) {
-          info2.options.headers["user-agent"] = this.userAgent;
+          info.options.headers["user-agent"] = this.userAgent;
         }
-        info2.options.agent = this._getAgent(info2.parsedUrl);
+        info.options.agent = this._getAgent(info.parsedUrl);
         if (this.handlers) {
           for (const handler of this.handlers) {
-            handler.prepareRequest(info2.options);
+            handler.prepareRequest(info.options);
           }
         }
-        return info2;
+        return info;
       }
       _mergeHeaders(headers) {
         if (this.requestOptions && this.requestOptions.headers) {
@@ -2142,10 +2142,10 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
       command_1.issueCommand("notice", utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
     }
     exports.notice = notice;
-    function info2(message) {
+    function info(message) {
       process.stdout.write(message + os.EOL);
     }
-    exports.info = info2;
+    exports.info = info;
     function startGroup2(name) {
       command_1.issue("group", name);
     }
@@ -8129,19 +8129,20 @@ function fixResponseChunkedTransferBadEnding(request, errorCallback) {
 
 // src/main.ts
 async function main() {
-  core.info("info test");
-  let nomadUrl = core.getInput("url", { required: false }) || "http://localhost:4646";
+  let nomadUrl = core.getInput("url", { required: false });
   let url = nomadUrl + "/v1/acl/login";
-  let method_name = core.getInput("method_name", { required: false }) || "github";
-  const githubAudience = core.getInput("jwtGithubAudience", { required: false });
-  let idToken = await core.getIDToken(githubAudience);
-  let github_identity_token = idToken;
+  let methodName = core.getInput("methodName", { required: false });
+  let idToken = core.getInput("identityToken", { required: false });
+  if (!idToken) {
+    let githubAudience = core.getInput("jwtGithubAudience", { required: false });
+    idToken = await core.getIDToken(githubAudience);
+  }
   let payload = {
-    AuthMethodName: method_name,
-    LoginToken: github_identity_token
+    AuthMethodName: methodName,
+    LoginToken: idToken
   };
   core.debug(`Retrieving Nomad Token from: ${url}`);
-  core.debug(`Using auth method: ${method_name}`);
+  core.debug(`Using auth method: ${methodName}`);
   let res;
   let data;
   try {
@@ -8164,7 +8165,8 @@ async function main() {
     core.debug(`Policies: ${JSON.stringify(data.Policies)}`);
     core.debug(`Roles: ${JSON.stringify(data.Roles)}`);
     core.endGroup();
-    core.setOutput("nomad_token", data.SecretID);
+    core.setOutput("nomadToken", data.SecretID);
+    core.setOutput("nomadUrl", url);
     return "done";
   } else {
     throw Error(`Unable to retrieve token from Nomad at url ${url}.`);

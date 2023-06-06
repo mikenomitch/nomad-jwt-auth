@@ -9,17 +9,17 @@ description: "A GitHub Action to mint a short-lived Nomad token using GHA identi
 inputs:
   url:
     description: "The URL of the Nomad cluster"
-    required: true
-  caCertificate:
-    description: "The CA certificate of the Nomad cluster"
+    default: "http://localhost:4646"
     required: false
-  method_name:
-    description: "The name of the auth method to use"
+  methodName:
+    description: "The name of the Nomad auth method to use"
     default: "github"
     required: false
-  token_ttl:
-    description: "The TTL for the minted token"
-    default: "3600" # 1 hour
+  identityToken:
+    description: "The JWT identity token to use. Will use Github Action if not provided"
+    required: false
+  jwtGithubAudience:
+    description: "The audience to use for the Github Action identity token. Only used if JWT not provided and using GHA JWT"
     required: false
 outputs:
   nomad_token:
