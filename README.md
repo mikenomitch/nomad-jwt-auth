@@ -99,3 +99,4 @@ See the dir `./nomad-config` for some helpful files for testing local config wit
 To make changes, edit `src/main.ts` and then run `npm run build`.
 
 You can run main locally with `npm run build && node dist/index.js` which can be helpful for development & debugging.
+
