@@ -6,7 +6,6 @@ If you provide an input of "identityToken", that will be used as the JWT to auth
 
 ## Remaining To Dos
 
-* Document how to do a simple management token setup
 * Document how to set up role/policy access and a more complex JWT
 * Document the permissions you need at the GHA level to get JWT acces
 
