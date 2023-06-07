@@ -1,5 +1,5 @@
-name: Nomad GHA Test
-run-name: ${{ github.actor }} is testing out Nomad actions
+name: GHA Test
+run-name: ${{ github.event.head_commit.message }} from ${{ github.actor }}
 on: [push]
 env:
   PRODUCT_VERSION: "1.5.6"
