@@ -27,4 +27,4 @@ jobs:
           url: ${{ env.NOMAD_URL }}
         continue-on-error: true
       - name: Get Status
-        run: NOMAD_URL="${{ env.NOMAD_URL }}" NOMAD_TOKEN="${{ steps.nomad-jwt-auth.outputs.nomadToken }}" nomad status
+        run: NOMAD_ADDR="${{ env.NOMAD_URL }}" NOMAD_TOKEN="${{ steps.nomad-jwt-auth.outputs.nomadToken }}" nomad status
