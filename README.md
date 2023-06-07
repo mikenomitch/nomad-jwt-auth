@@ -31,14 +31,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Setup `nomad`
-        uses: lucasmelin/setup-nomad@v1
+        uses: hashicorp/setup-nomad@v1.0.0
+        id: setup
         with:
           version: ${{ env.PRODUCT_VERSION }}
       - name: Run `nomad version`
         run: "nomad version"
       - name: Auth Into Nomad
         id: nomad-jwt-auth
-        uses: mikenomitch/nomad-jwt-auth@v1
+        uses: mikenomitch/nomad-jwt-auth@v1.0.0-rc.1
         with:
           url: ${{ env.NOMAD_ADDR }}
         continue-on-error: true
