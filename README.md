@@ -17,23 +17,34 @@ Must include the id-token `write` permission and contents `read` permission.
 
 Example:
 ```
-permissions:
+env:
+  PRODUCT_VERSION: "1.5.6"
+  NOMAD_ADDR: "http://my-nomad-addr.foo:4646"
+
+jobs:
+  Check-Nomad-Status:
+    runs-on: ubuntu-latest
+    permissions:
       id-token: write
       contents: read
-steps:
+    steps:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Setup `nomad`
         uses: lucasmelin/setup-nomad@v1
         with:
           version: ${{ env.PRODUCT_VERSION }}
-      - name: Use Local Action
+      - name: Run `nomad version`
+        run: "nomad version"
+      - name: Auth Into Nomad
         id: nomad-jwt-auth
         uses: mikenomitch/nomad-jwt-auth@v1
         with:
-          url: https://my-nomad-url:4646
+          url: ${{ env.NOMAD_ADDR }}
+        continue-on-error: true
       - name: Get Status
-        run: NOMAD_URL="${{ steps.nomad-jwt-auth.outputs.nomadUrl }}" NOMAD_TOKEN="${{ steps.nomad-jwt-auth.outputs.nomadToken }}" nomad status
+        run: NOMAD_ADDR="${{ env.NOMAD_ADDR }}" NOMAD_TOKEN="${{ steps.nomad-jwt-auth.outputs.nomadToken }}" nomad status
+
 ```
 
 ## Setting up Simple Auth for Github Actions
