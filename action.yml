@@ -12,7 +12,7 @@ inputs:
     default: "http://localhost:4646"
     required: false
   methodName:
-    description: "The name of the Nomad auth method to use"
+    description: "The name of the Nomad Auth Method to use"
     default: "github"
     required: false
   identityToken:
