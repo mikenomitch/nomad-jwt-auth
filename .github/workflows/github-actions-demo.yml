@@ -15,7 +15,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Setup `nomad`
-        uses: hashicorp/setup-nomad@v1.0.0-rc.1
+        uses: hashicorp/setup-nomad@v1
         id: setup
         with:
           version: ${{ env.PRODUCT_VERSION }}
