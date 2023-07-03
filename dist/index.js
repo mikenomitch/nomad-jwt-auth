@@ -2049,7 +2049,7 @@ var require_core = __commonJS({
       ExitCode2[ExitCode2["Success"] = 0] = "Success";
       ExitCode2[ExitCode2["Failure"] = 1] = "Failure";
     })(ExitCode = exports.ExitCode || (exports.ExitCode = {}));
-    function exportVariable(name, val) {
+    function exportVariable2(name, val) {
       const convertedVal = utils_1.toCommandValue(val);
       process.env[name] = convertedVal;
       const filePath = process.env["GITHUB_ENV"] || "";
@@ -2058,7 +2058,7 @@ var require_core = __commonJS({
       }
       command_1.issueCommand("set-env", { name }, convertedVal);
     }
-    exports.exportVariable = exportVariable;
+    exports.exportVariable = exportVariable2;
     function setSecret(secret) {
       command_1.issueCommand("add-mask", {}, secret);
     }
@@ -10324,6 +10324,8 @@ async function main() {
   let url = nomadUrl + "/v1/acl/login";
   let methodName = core.getInput("methodName", { required: false });
   let idToken = core.getInput("identityToken", { required: false });
+  let outputToken = core.getInput("outputToken", { required: false }).toLowerCase() != "false";
+  let exportToken = core.getInput("exportToken", { required: false }).toLowerCase() != "false";
   if (!idToken) {
     let githubAudience = core.getInput("jwtGithubAudience", { required: false });
     idToken = await core.getIDToken(githubAudience);
@@ -10345,7 +10347,6 @@ async function main() {
     core.debug(err);
     throw err;
   }
-  console.log("data:", data);
   if (data && data.SecretID) {
     core.debug("\u2714 Nomad Token successfully retrieved");
     core.startGroup("Token Info");
@@ -10356,7 +10357,12 @@ async function main() {
     core.debug(`Roles: ${JSON.stringify(data.Roles)}`);
     core.endGroup();
     core.setOutput("nomadUrl", url);
-    core.setOutput("nomadToken", data.SecretID);
+    if (outputToken) {
+      core.setOutput("nomadToken", data.SecretID);
+    }
+    if (exportToken) {
+      core.exportVariable("NOMAD_TOKEN", data.SecretID);
+    }
     return "done";
   } else {
     throw Error(`Unable to retrieve token from Nomad at url ${url}.`);
@@ -10387,7 +10393,6 @@ function httpClient() {
   for (let [headerName, headerValue] of extraHeaders) {
     defaultOptions2.headers[headerName] = headerValue;
   }
-  console.log("defaultOptions:", defaultOptions2);
   return source_default2.extend(defaultOptions2);
 }
 function parseHeadersInput(inputKey, inputOptions) {

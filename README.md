@@ -6,7 +6,6 @@ If you provide an input of "identityToken", that will be used as the JWT to auth
 
 ## Remaining To Dos
 
-* Add nicer inputs documentation
 * Document how to set up role/policy access and a more complex JWT
 * Document the permissions you need at the GHA level to get JWT acces
 
@@ -113,3 +112,20 @@ To make changes, edit `src/main.ts` and then run `npm run build`.
 
 You can run main locally with `npm run build && node dist/index.js` which can be helpful for development & debugging.
 
+## Reference
+
+Here are all the inputs available through `with`:
+
+| Input             | Description                                                                                                                                         | Default                      | Required |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- | -------- |
+| `url`             | The URL of the Nomad cluster                                                                                                                        | `http://localhost:4646`     |          |
+| `methodName`      | The name of the Nomad Auth Method to use                                                                                                            | `github`                     |          |
+| `identityToken`   | The JWT identity token to use. Will use Github Action if not provided                                                                               |                              |          |
+| `jwtGithubAudience` | The audience to use for the Github Action identity token. Only used if JWT not provided and using GHA JWT                                          |                              |          |
+| `exportToken`     | Whether or not export Nomad token as environment variables                                                                                          | `true`                       |          |
+| `outputToken`     | Whether or not to set the `nomadToken` output to contain the Nomad token after authentication                                                        | `true`                       |          |
+| `tlsSkipVerify`   | When set to true, disables verification of the Nomad server certificate - setting this to true in production is not recommended                      |                              |          |
+| `caCertificate`   | Base64 encoded CA certificate to verify the Nomad server certificate                                                                                 |                              |          |
+| `clientCertificate` | Base64 encoded client certificate for mTLS communication with the Nomad server                                                                      |                              |          |
+| `clientKey`       | Base64 encoded client key for mTLS communication with the Nomad server                                                                              |                              |          |
+| `extraHeaders`    | A string of newline separated extra headers to include on every request                                                                             |                              |          |
