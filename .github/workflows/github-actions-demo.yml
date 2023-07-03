@@ -25,12 +25,6 @@ jobs:
         with:
           url: ${{ env.NOMAD_ADDR }}
           tlsSkipVerify: true
-          caCertificate: "test"
-          clientCertificate: "test2"
-          clientKey: "test3"
-          extraHeaders: |
-            X-Foo: foofoo
-            X-Bar: barbar
         continue-on-error: true
       - name: Get Status
         run: NOMAD_ADDR="${{ env.NOMAD_ADDR }}" NOMAD_TOKEN="${{ steps.nomad-jwt-auth.outputs.nomadToken }}" nomad status

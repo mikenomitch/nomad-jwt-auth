@@ -36,8 +36,6 @@ async function main() {
     throw err;
   }
 
-  console.log("data:", data)
-
   if (data && data.SecretID) {
     core.debug('✔ Nomad Token successfully retrieved');
 
@@ -91,8 +89,6 @@ function httpClient() {
   for (let [headerName, headerValue] of extraHeaders) {
     defaultOptions.headers[headerName] = headerValue;
   }
-
-  console.log("defaultOptions:", defaultOptions);
 
   return got.extend(defaultOptions);
 }
