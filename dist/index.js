@@ -10334,19 +10334,16 @@ async function main() {
   };
   core.debug(`Retrieving Nomad Token from: ${url}`);
   core.debug(`Using auth method: ${methodName}`);
-  let res;
   let data;
   try {
-    res = await source_default2.put(url, {
+    data = await source_default2.put(url, {
       json: payload
     }).json();
-    data = res.data;
   } catch (err) {
     core.debug("Error making Put to Nomad");
     core.debug(err);
     throw err;
   }
-  console.log("res:", res);
   console.log("data:", data);
   if (data && data.SecretID) {
     core.debug("\u2714 Nomad Token successfully retrieved");
