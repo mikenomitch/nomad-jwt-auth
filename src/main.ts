@@ -1,6 +1,5 @@
 // @ts-check
 import * as core from '@actions/core';
-import fetch from 'node-fetch';
 import got from 'got';
 
 async function main() {
@@ -25,12 +24,6 @@ async function main() {
   let data;
 
   try {
-    // res = await fetch(url, {
-    //   method: 'PUT',
-    //   body: JSON.stringify(payload),
-    // });
-    // data = await res.json();
-
     data = await got.put(url, {
       json: payload
     }).json();
@@ -40,8 +33,6 @@ async function main() {
     core.debug(err);
     throw err;
   }
-
-  console.log("data:", data)
 
   if (data && data.SecretID) {
     core.debug('✔ Nomad Token successfully retrieved');
