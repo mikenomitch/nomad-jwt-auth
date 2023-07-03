@@ -3,6 +3,9 @@
   "ExpirationLeeway": "1h",
   "ClockSkewLeeway": "1h",
   "ClaimMappings": {
-    "repository_owner": "owner"
+    "repository_owner": "owner",
+    "repository": "repo",
+    "workflow": "workflow",
+    "ref": "ref"
   }
 }

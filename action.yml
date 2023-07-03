@@ -30,6 +30,7 @@ inputs:
     default: 'true'
     required: false
   tlsSkipVerify:
+    default: 'false'
     description: "When set to true, disables verification of the Nomad server certificate - setting this to true in production is not recommended"
     required: false
   caCertificate:
