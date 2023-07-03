@@ -10346,6 +10346,8 @@ async function main() {
     core.debug(err);
     throw err;
   }
+  console.log("res:", res);
+  console.log("data:", data);
   if (data && data.SecretID) {
     core.debug("\u2714 Nomad Token successfully retrieved");
     core.startGroup("Token Info");

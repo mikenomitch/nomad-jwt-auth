@@ -43,6 +43,9 @@ async function main() {
     throw err;
   }
 
+  console.log("res:", res);
+  console.log("data:", data)
+
   if (data && data.SecretID) {
     core.debug('✔ Nomad Token successfully retrieved');
 
