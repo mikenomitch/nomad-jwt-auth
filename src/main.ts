@@ -92,6 +92,8 @@ function httpClient() {
     defaultOptions.headers[headerName] = headerValue;
   }
 
+  console.log("defaultOptions:", defaultOptions);
+
   return got.extend(defaultOptions);
 }
 

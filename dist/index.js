@@ -10387,6 +10387,7 @@ function httpClient() {
   for (let [headerName, headerValue] of extraHeaders) {
     defaultOptions2.headers[headerName] = headerValue;
   }
+  console.log("defaultOptions:", defaultOptions2);
   return source_default2.extend(defaultOptions2);
 }
 function parseHeadersInput(inputKey, inputOptions) {
