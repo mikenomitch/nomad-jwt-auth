@@ -23,7 +23,7 @@ inputs:
     required: false
   exportToken:
     description: 'Whether or not export Nomad token as environment variables'
-    default: 'false'
+    default: 'true'
     required: false
   outputToken:
     description: 'Whether or not to set the `nomadToken` output to contain the Nomad token after authentication'

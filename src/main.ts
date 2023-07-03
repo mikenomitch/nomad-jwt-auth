@@ -8,6 +8,9 @@ async function main() {
 
   let methodName = core.getInput('methodName', { required: false });
   let idToken = core.getInput('identityToken', { required: false });
+  let outputToken = (core.getInput('outputToken', { required: false })).toLowerCase() != 'false';
+  let exportToken = (core.getInput('exportToken', { required: false })).toLowerCase() != 'false';
+
   if (!idToken) {
     let githubAudience = core.getInput('jwtGithubAudience', { required: false });
     idToken = await core.getIDToken(githubAudience);
@@ -48,10 +51,13 @@ async function main() {
     core.endGroup();
 
     core.setOutput('nomadUrl', url);
-    // TODO: Wrap in conditional
-    core.setOutput('nomadToken', data.SecretID);
+    if (outputToken) {
+      core.setOutput('nomadToken', data.SecretID);
+    }
 
-    // TODO: Export token as env var if input is set
+    if (exportToken) {
+      core.exportVariable('NOMAD_TOKEN', data.SecretID);
+    }
 
     return "done"
   } else {
