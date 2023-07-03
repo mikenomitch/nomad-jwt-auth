@@ -1,6 +1,7 @@
 // @ts-check
 import * as core from '@actions/core';
 import fetch from 'node-fetch';
+import got from 'got';
 
 async function main() {
   let nomadUrl = core.getInput('url', { required: false });
@@ -25,11 +26,16 @@ async function main() {
   let data;
 
   try {
-    res = await fetch(url, {
-      method: 'PUT',
-      body: JSON.stringify(payload),
-    });
-    data = await res.json();
+    // res = await fetch(url, {
+    //   method: 'PUT',
+    //   body: JSON.stringify(payload),
+    // });
+    // data = await res.json();
+
+    res = await got.put(url, {
+      json: payload
+    }).json();
+    data = res.data;
 
   } catch (err) {
     core.debug("Error making Put to Nomad");

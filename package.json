@@ -5,10 +5,11 @@
   "main": "dist/index.js",
   "dependencies": {
     "@actions/core": "^1.10.0",
-    "jsrsasign": "^10.6.1",
-    "esbuild": "0.17.19",
     "@types/node": "^7.0.5",
     "@types/node-fetch": "^2.6.2",
+    "esbuild": "0.17.19",
+    "got": "13.0.0",
+    "jsrsasign": "^10.6.1",
     "node-fetch": "^3.3.0"
   },
   "scripts": {
