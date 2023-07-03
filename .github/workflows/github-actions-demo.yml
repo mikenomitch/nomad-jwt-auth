@@ -24,6 +24,7 @@ jobs:
         uses: "./"
         with:
           url: ${{ env.NOMAD_ADDR }}
+          tlsSkipVerify: true
         continue-on-error: true
       - name: Get Status
         run: NOMAD_ADDR="${{ env.NOMAD_ADDR }}" NOMAD_TOKEN="${{ steps.nomad-jwt-auth.outputs.nomadToken }}" nomad status

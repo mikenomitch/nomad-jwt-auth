@@ -10328,6 +10328,7 @@ async function main() {
     let githubAudience = core.getInput("jwtGithubAudience", { required: false });
     idToken = await core.getIDToken(githubAudience);
   }
+  let client = httpClient();
   let payload = {
     AuthMethodName: methodName,
     LoginToken: idToken
@@ -10336,7 +10337,7 @@ async function main() {
   core.debug(`Using auth method: ${methodName}`);
   let data;
   try {
-    data = await source_default2.put(url, {
+    data = await client.put(url, {
       json: payload
     }).json();
   } catch (err) {
@@ -10354,11 +10355,53 @@ async function main() {
     core.debug(`Policies: ${JSON.stringify(data.Policies)}`);
     core.debug(`Roles: ${JSON.stringify(data.Roles)}`);
     core.endGroup();
-    core.setOutput("nomadToken", data.SecretID);
     core.setOutput("nomadUrl", url);
+    core.setOutput("nomadToken", data.SecretID);
     return "done";
   } else {
     throw Error(`Unable to retrieve token from Nomad at url ${url}.`);
   }
+}
+function httpClient() {
+  let defaultOptions2 = {
+    headers: {},
+    https: {}
+  };
+  let tlsSkipVerify = (core.getInput("tlsSkipVerify", { required: false }) || "false").toLowerCase() != "false";
+  if (tlsSkipVerify === true) {
+    defaultOptions2.https.rejectUnauthorized = false;
+  }
+  let caCertificateRaw = core.getInput("caCertificate", { required: false });
+  if (caCertificateRaw != null) {
+    defaultOptions2.https.certificateAuthority = Buffer.from(caCertificateRaw, "base64").toString();
+  }
+  let clientCertificateRaw = core.getInput("clientCertificate", { required: false });
+  if (clientCertificateRaw != null) {
+    defaultOptions2.https.certificate = Buffer.from(clientCertificateRaw, "base64").toString();
+  }
+  let clientKeyRaw = core.getInput("clientKey", { required: false });
+  if (clientKeyRaw != null) {
+    defaultOptions2.https.key = Buffer.from(clientKeyRaw, "base64").toString();
+  }
+  let extraHeaders = parseHeadersInput("extraHeaders", { required: false });
+  for (let [headerName, headerValue] of extraHeaders) {
+    defaultOptions2.headers[headerName] = headerValue;
+  }
+  return source_default2.extend(defaultOptions2);
+}
+function parseHeadersInput(inputKey, inputOptions) {
+  const rawHeadersString = core.getInput(inputKey, inputOptions) || "";
+  const headerStrings = rawHeadersString.split("\n").map((line) => line.trim()).filter((line) => line !== "");
+  return headerStrings.reduce((map, line) => {
+    const seperator = line.indexOf(":");
+    const key = line.substring(0, seperator).trim().toLowerCase();
+    const value = line.substring(seperator + 1).trim();
+    if (map.has(key)) {
+      map.set(key, [map.get(key), value].join(", "));
+    } else {
+      map.set(key, value);
+    }
+    return map;
+  }, /* @__PURE__ */ new Map());
 }
 main();

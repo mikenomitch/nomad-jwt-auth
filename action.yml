@@ -21,6 +21,29 @@ inputs:
   jwtGithubAudience:
     description: "The audience to use for the Github Action identity token. Only used if JWT not provided and using GHA JWT"
     required: false
+  exportToken:
+    description: 'Whether or not export Nomad token as environment variables'
+    default: 'false'
+    required: false
+  outputToken:
+    description: 'Whether or not to set the `nomadToken` output to contain the Nomad token after authentication'
+    default: 'true'
+    required: false
+  tlsSkipVerify:
+    description: "When set to true, disables verification of the Nomad server certificate - setting this to true in production is not recommended"
+    required: false
+  caCertificate:
+    description: "Base64 encoded CA certificate to verify the Nomad server certificate"
+    required: false
+  clientCertificate:
+    description: "Base64 encoded client certificate for mTLS communication with the Nomad server"
+    required: false
+  clientKey:
+    description: "Base64 encoded client key for mTLS communication with the Nomad server"
+    required: false
+  extraHeaders:
+    description: "A string of newline separated extra headers to include on every request"
+    required: false
 outputs:
   nomad_token:
     description: "The Nomad token minted using github auth"
