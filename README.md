@@ -173,8 +173,6 @@ You can run main locally with `npm run build && node dist/index.js` which can be
 
 Here are all the inputs available through `with`:
 
-Sure, here is the requested table:
-
 | Input             | Description                                                                                                                                         | Default                      |
 | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
 | `url`             | The URL of the Nomad cluster                                                                                                                        | `http://localhost:4646`     |
